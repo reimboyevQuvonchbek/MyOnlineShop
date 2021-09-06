@@ -1,0 +1,93 @@
+<html>
+<head>
+<title>KatalogFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+KatalogFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import androidx.navigation.fragment.findNavController</span>
+<span class="s1">import com.google.firebase.database.*</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.adapters.AdapterKatalog</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.adapters.OnclickKatalog</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.FragmentKatalogBinding</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Katalog</span>
+
+
+<span class="s0">class </span><span class="s1">KatalogFragment : Fragment() {</span>
+
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">binding:FragmentKatalogBinding</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">typeList:ArrayList&lt;Katalog&gt;</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">adapterKatalog: AdapterKatalog</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">firebaseDatabase: FirebaseDatabase</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">reference: DatabaseReference</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater, container: ViewGroup?,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s1">): View {</span>
+        <span class="s2">// Inflate the layout for this fragment</span>
+        <span class="s1">binding= FragmentKatalogBinding.inflate(layoutInflater, container, </span><span class="s0">false</span><span class="s1">)</span>
+        <span class="s1">loadData()</span>
+
+        <span class="s1">firebaseDatabase= FirebaseDatabase.getInstance()</span>
+        <span class="s1">reference=firebaseDatabase.getReference(</span><span class="s3">&quot;product&quot;</span><span class="s1">)</span>
+
+
+
+        <span class="s1">adapterKatalog= AdapterKatalog(typeList,</span><span class="s0">object </span><span class="s1">:OnclickKatalog{</span>
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onclickItem(typename: String) {</span>
+               <span class="s0">var </span><span class="s1">bundle=Bundle()</span>
+                <span class="s1">bundle.putString(</span><span class="s3">&quot;key_type&quot;</span><span class="s1">,typename)</span>
+                <span class="s1">findNavController().navigate(R.id.typeProductFragment,bundle)</span>
+            <span class="s1">}</span>
+
+        <span class="s1">})</span>
+        <span class="s1">binding.rvKatolog.adapter=adapterKatalog</span>
+
+        <span class="s0">return </span><span class="s1">binding.root</span>
+    <span class="s1">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">loadData() {</span>
+
+
+        <span class="s1">typeList= ArrayList()</span>
+        <span class="s1">typeList.add(</span>
+            <span class="s1">Katalog(</span><span class="s3">&quot;Telefon va Smartfonlar&quot;</span><span class="s1">,</span><span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/myfirebase-8f3d5.appspot.com/o/imagesS21.jpg?alt=media&amp;token=2830ebbb-1bb8-463e-bcfd-0990d7e3dba3&quot;</span><span class="s1">) )</span>
+        <span class="s1">typeList.add(</span>
+            <span class="s1">Katalog(</span><span class="s3">&quot;Noutbook va Kompyuter&quot;</span><span class="s1">,</span><span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/myfirebase-8f3d5.appspot.com/o/noutbook.jpg?alt=media&amp;token=9e674cb6-47d1-40a1-a451-636a13a322b4&quot;</span><span class="s1">)   )</span>
+        <span class="s1">typeList.add(Katalog(</span><span class="s3">&quot;Televizor va monitorlar&quot;</span><span class="s1">,</span><span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/myfirebase-8f3d5.appspot.com/o/televizor.jpg?alt=media&amp;token=074c2285-1b76-4fc2-9e0e-5c2b41f771ee&quot;</span><span class="s1">))</span>
+        <span class="s1">typeList.add(Katalog(</span><span class="s3">&quot;Maishiy texnika&quot;</span><span class="s1">,</span><span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/myfirebase-8f3d5.appspot.com/o/mtex.jpg?alt=media&amp;token=3292b2cc-b228-4e67-971b-8f0c18067ebe&quot;</span><span class="s1">))</span>
+        <span class="s1">typeList.add(</span>
+            <span class="s1">Katalog(</span><span class="s3">&quot;Oshxona uchun texnika&quot;</span><span class="s1">,</span><span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/myfirebase-8f3d5.appspot.com/o/plita.jpg?alt=media&amp;token=ce68b05a-8d77-4f1f-b12d-c1cc1f4e43aa&quot;</span><span class="s1">))</span>
+
+
+    <span class="s1">}</span>
+
+    <span class="s1">companion </span><span class="s0">object </span><span class="s1">{</span>
+        <span class="s1">@JvmStatic</span>
+        <span class="s0">fun </span><span class="s1">newInstance(param1: String, param2: String) =</span>
+            <span class="s1">KatalogFragment().apply {</span>
+                <span class="s1">arguments = Bundle().apply {</span>
+
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

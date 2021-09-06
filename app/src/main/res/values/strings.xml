@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Online Shop</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="profilni_o_zgartirish">Profilni o`zgartirish</string>
+    <string name="buyurtmalar_tarixi">Buyurtmalar tarixi</string>
+</resources>

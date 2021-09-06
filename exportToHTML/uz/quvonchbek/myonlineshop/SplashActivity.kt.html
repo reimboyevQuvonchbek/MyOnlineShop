@@ -1,0 +1,55 @@
+<html>
+<head>
+<title>SplashActivity.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #1750eb;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+SplashActivity.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+
+<span class="s1">import android.content.Intent</span>
+<span class="s1">import androidx.appcompat.app.AppCompatActivity</span>
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import android.os.Handler</span>
+<span class="s1">import com.google.gson.Gson</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.User</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.utils.MyShared</span>
+
+<span class="s0">class </span><span class="s1">SplashActivity : AppCompatActivity() {</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate(savedInstanceState: Bundle?) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span>
+        <span class="s1">setContentView(R.layout.activity_splash)</span>
+
+        <span class="s1">Handler().postDelayed(Runnable { </span><span class="s2">/* Create an Intent that will start the Menu-Activity. */</span>
+            <span class="s0">val </span><span class="s1">my: MyShared = MyShared.getInstance(</span><span class="s0">this</span><span class="s1">)</span>
+            <span class="s0">try </span><span class="s1">{</span>
+                <span class="s0">val </span><span class="s1">str: String = my.activeUser.toString()</span>
+                <span class="s0">if</span><span class="s1">(str.isNotEmpty()){</span>
+                    <span class="s0">var </span><span class="s1">activeUser: User = Gson().fromJson(str,User::</span><span class="s0">class</span><span class="s1">.java)</span>
+                    <span class="s0">val </span><span class="s1">mainIntent = Intent(</span><span class="s0">this</span><span class="s1">, MainActivity::</span><span class="s0">class</span><span class="s1">.java)</span>
+                    <span class="s0">this</span><span class="s1">.startActivity(mainIntent)</span>
+                    <span class="s0">this</span><span class="s1">.finish()</span>
+                <span class="s1">}</span><span class="s0">else</span><span class="s1">{</span>
+                    <span class="s0">val </span><span class="s1">loginIntent = Intent(</span><span class="s0">this</span><span class="s1">, LoginActivity::</span><span class="s0">class</span><span class="s1">.java)</span>
+                    <span class="s0">this</span><span class="s1">.startActivity(loginIntent)</span>
+                    <span class="s0">this</span><span class="s1">.finish()</span>
+                <span class="s1">}</span>
+            <span class="s1">} catch (e: Exception) {</span>
+                <span class="s1">e.message</span>
+            <span class="s1">}</span>
+
+        <span class="s1">}, </span><span class="s3">1000</span><span class="s1">)</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

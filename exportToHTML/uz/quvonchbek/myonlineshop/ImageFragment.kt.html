@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>ImageFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ImageFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import com.squareup.picasso.Picasso</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.FragmentImageBinding</span>
+<span class="s1">import java.lang.Exception</span>
+
+<span class="s1">private const </span><span class="s0">val </span><span class="s1">ARG_PARAM1 = </span><span class="s2">&quot;param1&quot;</span>
+
+<span class="s0">class </span><span class="s1">ImageFragment : Fragment() {</span>
+    <span class="s1">private </span><span class="s0">var </span><span class="s1">param1: String? = </span><span class="s0">null</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">binding: FragmentImageBinding</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate(savedInstanceState: Bundle?) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span>
+        <span class="s1">arguments?.let {</span>
+            <span class="s1">param1 = it.getString(ARG_PARAM1)</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater, container: ViewGroup?,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s1">): View? {</span>
+       <span class="s1">binding = FragmentImageBinding.inflate(layoutInflater)</span>
+
+        <span class="s1">Picasso.get().load(param1).placeholder(R.drawable.image)</span>
+            <span class="s1">.into(binding.image, </span><span class="s0">object </span><span class="s1">: com.squareup.picasso.Callback {</span>
+                <span class="s1">override </span><span class="s0">fun </span><span class="s1">onSuccess() {</span>
+                    <span class="s1">binding.image.visibility = View.VISIBLE</span>
+                    <span class="s1">binding.progressCircular.visibility = View.INVISIBLE</span>
+                <span class="s1">}</span>
+
+                <span class="s1">override </span><span class="s0">fun </span><span class="s1">onError(e: Exception?) {</span>
+
+                <span class="s1">}</span>
+
+            <span class="s1">})</span>
+
+        <span class="s0">return </span><span class="s1">binding.root</span>
+    <span class="s1">}</span>
+
+    <span class="s1">companion </span><span class="s0">object </span><span class="s1">{</span>
+
+        <span class="s1">@JvmStatic</span>
+        <span class="s0">fun </span><span class="s1">newInstance(param1: String, param2: String) =</span>
+            <span class="s1">ImageFragment().apply {</span>
+                <span class="s1">arguments = Bundle().apply {</span>
+                    <span class="s1">putString(ARG_PARAM1, param1)</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

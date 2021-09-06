@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>TypeProductFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+TypeProductFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import androidx.navigation.fragment.findNavController</span>
+<span class="s1">import com.google.firebase.database.*</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.adapters.RvAdapter</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.FragmentTypeProductBinding</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Product</span>
+
+<span class="s0">class </span><span class="s1">TypeProductFragment : Fragment() {</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">binding: FragmentTypeProductBinding</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">rvAdapter: RvAdapter</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">list: ArrayList&lt;Product&gt;</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">firebaseDatabase: FirebaseDatabase</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">reference: DatabaseReference</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater, container: ViewGroup?,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+
+    <span class="s1">): View {</span>
+        <span class="s1">binding = FragmentTypeProductBinding.inflate(layoutInflater, container, </span><span class="s0">false</span><span class="s1">)</span>
+        <span class="s0">var </span><span class="s1">typname=arguments?.getString(</span><span class="s2">&quot;key_type&quot;</span><span class="s1">)</span>
+        <span class="s1">firebaseDatabase= FirebaseDatabase.getInstance()</span>
+        <span class="s1">reference=firebaseDatabase.getReference(</span><span class="s2">&quot;product&quot;</span><span class="s1">)</span>
+        <span class="s1">reference.child(typname.toString()).addValueEventListener(</span><span class="s0">object </span><span class="s1">: ValueEventListener {</span>
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onDataChange(snapshot: DataSnapshot) {</span>
+                <span class="s0">var </span><span class="s1">children = snapshot.children</span>
+                <span class="s1">list= ArrayList()</span>
+                <span class="s0">for </span><span class="s1">(child </span><span class="s0">in </span><span class="s1">children) {</span>
+                    <span class="s0">var </span><span class="s1">p=child.getValue(Product::</span><span class="s0">class</span><span class="s1">.java)</span>
+                    <span class="s1">list.add(p!!)</span>
+                <span class="s1">}</span>
+                <span class="s1">rvAdapter= RvAdapter(list,</span><span class="s0">object </span><span class="s1">: RvAdapter.OnClicListener{</span>
+                    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onItemClic(product: Product, position: Int) {</span>
+                        <span class="s0">var </span><span class="s1">bundle=Bundle()</span>
+                        <span class="s1">bundle.putSerializable(</span><span class="s2">&quot;product&quot;</span><span class="s1">,product)</span>
+                        <span class="s1">findNavController().navigate(R.id.productFragment,bundle)</span>
+                    <span class="s1">}</span>
+
+                <span class="s1">})</span>
+                <span class="s1">binding.rv.adapter=rvAdapter</span>
+            <span class="s1">}</span>
+
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCancelled(error: DatabaseError) {</span>
+                <span class="s1">TODO(</span><span class="s2">&quot;Not yet implemented&quot;</span><span class="s1">)</span>
+            <span class="s1">}</span>
+
+        <span class="s1">})</span>
+
+
+
+        <span class="s0">return </span><span class="s1">binding.root</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

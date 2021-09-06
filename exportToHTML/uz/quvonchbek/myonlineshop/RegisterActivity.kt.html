@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>RegisterActivity.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+RegisterActivity.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+
+<span class="s1">import androidx.appcompat.app.AppCompatActivity</span>
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import android.widget.Toast</span>
+<span class="s1">import com.google.firebase.database.*</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.ActivityRegisterBinding</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.User</span>
+
+<span class="s0">class </span><span class="s1">RegisterActivity : AppCompatActivity() {</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">binding:ActivityRegisterBinding</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">firebaseDatabase: FirebaseDatabase</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">reference: DatabaseReference</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate(savedInstanceState: Bundle?) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span>
+        <span class="s1">binding= ActivityRegisterBinding.inflate(layoutInflater)</span>
+        <span class="s1">setContentView(binding.root)</span>
+        <span class="s1">firebaseDatabase= FirebaseDatabase.getInstance()</span>
+        <span class="s1">reference=firebaseDatabase.getReference(</span><span class="s2">&quot;users&quot;</span><span class="s1">)</span>
+        <span class="s1">binding.registerBtn.setOnClickListener {</span>
+            <span class="s0">var </span><span class="s1">newName=binding.newName.text.toString()</span>
+            <span class="s0">var </span><span class="s1">newPassword=binding.newPassword.text.toString()</span>
+            <span class="s0">var </span><span class="s1">newAdres=binding.newAdress.text.toString()</span>
+            <span class="s0">var </span><span class="s1">newNumber=binding.newNumber.text.toString()</span>
+            <span class="s0">if</span><span class="s1">(newName.isNotEmpty() &amp;&amp; newPassword.isNotEmpty() &amp;&amp; newNumber.isNotEmpty() &amp;&amp; newAdres.isNotEmpty()){</span>
+                <span class="s0">val </span><span class="s1">id = reference.push().key.toString()</span>
+                <span class="s0">var </span><span class="s1">newUser=User(id,newName,newNumber,newAdres,newPassword)</span>
+                <span class="s0">var </span><span class="s1">z=</span><span class="s0">true</span>
+                <span class="s1">reference.addValueEventListener(</span><span class="s0">object </span><span class="s1">: ValueEventListener {</span>
+                    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onDataChange(snapshot: DataSnapshot) {</span>
+                        <span class="s0">val </span><span class="s1">children = snapshot.children</span>
+                        <span class="s0">for </span><span class="s1">(child </span><span class="s0">in </span><span class="s1">children) {</span>
+                            <span class="s0">var </span><span class="s1">u = child.getValue(User::</span><span class="s0">class</span><span class="s1">.java)</span>
+                            <span class="s0">if </span><span class="s1">(newUser.name == u?.name) {</span>
+                                <span class="s1">z = </span><span class="s0">false</span>
+                            <span class="s1">}</span>
+                        <span class="s1">}</span>
+                    <span class="s1">}</span>
+
+                    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCancelled(error: DatabaseError) {</span>
+                        <span class="s1">Toast.makeText(</span><span class="s0">this</span><span class="s1">@RegisterActivity, </span><span class="s2">&quot;Xatolik 1&quot;</span><span class="s1">, Toast.LENGTH_SHORT)</span>
+                            <span class="s1">.show()</span>
+                    <span class="s1">}</span>
+                <span class="s1">})</span>
+                <span class="s0">if</span><span class="s1">(z){</span>
+                    <span class="s1">reference.child(id).setValue(newUser)</span>
+                    <span class="s1">finish()</span>
+                <span class="s1">}</span><span class="s0">else</span><span class="s1">{</span>
+                    <span class="s1">Toast.makeText(</span><span class="s0">this</span><span class="s1">, </span><span class="s2">&quot;Bunday username royhatdan otgan&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show()</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">Toast.makeText(</span><span class="s0">this</span><span class="s1">, </span><span class="s2">&quot;Barcha bo`limlar to`ldirilishi kerak&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show()</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

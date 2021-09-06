@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav_graph"
+    app:startDestination="@id/homeFragment2">
+    <fragment
+        android:id="@+id/homeFragment2"
+        android:name="uz.quvonchbek.myonlineshop.HomeFragment"
+        android:label="Online Shop"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment2_to_productFragment"
+            app:destination="@id/productFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/acauntFragment"
+        android:name="uz.quvonchbek.myonlineshop.AcauntFragment"
+        android:label="Accaunt"
+        tools:layout="@layout/fragment_acaunt" />
+    <fragment
+        android:id="@+id/katalogFragment"
+        android:name="uz.quvonchbek.myonlineshop.KatalogFragment"
+        android:label="Katalog"
+        tools:layout="@layout/fragment_katalog" >
+        <action
+            android:id="@+id/action_katalogFragment_to_typeProductFragment2"
+            app:destination="@id/typeProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/korzinkaFragment"
+        android:name="uz.quvonchbek.myonlineshop.KorzinkaFragment"
+        android:label="Korzinka"
+        tools:layout="@layout/fragment_korzinka" />
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="uz.quvonchbek.myonlineshop.ProductFragment"
+        android:label="Mahsulot"
+        tools:layout="@layout/fragment_product" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="uz.quvonchbek.myonlineshop.CategoryFragment"
+        android:label="Hamma mahsulotlar"
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_productFragment"
+            app:destination="@id/productFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/typeProductFragment"
+        android:name="uz.quvonchbek.myonlineshop.TypeProductFragment"
+        android:label="Katalog"
+        tools:layout="@layout/fragment_type_product" >
+        <action
+            android:id="@+id/action_typeProductFragment_to_productFragment2"
+            app:destination="@id/productFragment" />
+    </fragment>
+</navigation>

@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>CategoryFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #067d17;}
+.s3 { color: #8c8c8c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+CategoryFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.adapters.CategoryAdapter</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.FragmentCategoryBinding</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Category</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Product</span>
+
+<span class="s0">class </span><span class="s1">CategoryFragment : Fragment() {</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">binding: FragmentCategoryBinding</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">categoryAdapter: CategoryAdapter</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater, container: ViewGroup?,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s1">): View? {</span>
+        <span class="s1">binding = FragmentCategoryBinding.inflate(layoutInflater)</span>
+        <span class="s0">var </span><span class="s1">category=arguments?.getSerializable(</span><span class="s2">&quot;key1&quot;</span><span class="s1">) </span><span class="s0">as </span><span class="s1">Category</span>
+
+<span class="s3">//        var list = ArrayList&lt;String&gt;()</span>
+<span class="s3">//        list.add(&quot;https://storage.kun.uz/source/7/R_jGM8XSliwiveVImeW7aI9bA7W5Gl_5.jpg&quot;)</span>
+<span class="s3">//        list.add(&quot;https://storage.kun.uz/source/7/ZBBN9N6vxCu9gJ-icYEflrwim0YiHZZW.jpg&quot;)</span>
+<span class="s3">//        list.add(&quot;https://storage.kun.uz/source/7/ZBBN9N6vxCu9gJ-icYEflrwim0YiHZZW.jpg&quot;)</span>
+<span class="s3">//        list.add(&quot;https://storage.kun.uz/source/7/M-t5CStOJDcs1lbT92rclpSZvOusom9D.jpg&quot;)</span>
+<span class="s3">//        list.add(&quot;https://storage.kun.uz/source/7/Dd2Iwkyu76B3lDb-0JXfvgdGzdXCZSA7.jpg&quot;)</span>
+
+
+
+
+        <span class="s1">categoryAdapter = CategoryAdapter(category.productList, </span><span class="s0">object </span><span class="s1">: CategoryAdapter.OnItemProductClick{</span>
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onProductItemClick(product: Product) {</span>
+
+            <span class="s1">}</span>
+
+        <span class="s1">})</span>
+        <span class="s1">binding.rv.adapter = categoryAdapter</span>
+        <span class="s0">return </span><span class="s1">binding.root</span>
+    <span class="s1">}</span>
+
+<span class="s1">}</span></pre>
+</body>
+</html>

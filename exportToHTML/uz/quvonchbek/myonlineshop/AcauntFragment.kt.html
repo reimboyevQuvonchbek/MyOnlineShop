@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>AcauntFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AcauntFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+
+<span class="s1">import android.content.Intent</span>
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import androidx.navigation.fragment.findNavController</span>
+<span class="s1">import com.google.gson.Gson</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.FragmentAcauntBinding</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.utils.MyShared</span>
+
+
+<span class="s0">class </span><span class="s1">AcauntFragment : Fragment() {</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate(savedInstanceState: Bundle?) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span>
+        <span class="s1">arguments?.let {</span>
+
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">binding: FragmentAcauntBinding</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater, container: ViewGroup?,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s1">): View? {</span>
+        <span class="s2">// Inflate the layout for this fragment</span>
+        <span class="s1">binding= FragmentAcauntBinding.inflate(layoutInflater, container, </span><span class="s0">false</span><span class="s1">)</span>
+        <span class="s0">var </span><span class="s1">user=MainActivity.getUserA(requireContext())</span>
+        <span class="s1">binding.phonenumber.setText(user.phoneNumber)</span>
+        <span class="s1">binding.username.setText(user.name)</span>
+        <span class="s1">binding.relative5.setOnClickListener{</span>
+            <span class="s0">val </span><span class="s1">myShared1: MyShared = MyShared.getInstance(requireContext())</span>
+            <span class="s1">myShared1.activeUser = </span><span class="s0">null</span>
+
+            <span class="s0">var </span><span class="s1">intent=Intent(requireActivity(),LoginActivity::</span><span class="s0">class</span><span class="s1">.java)</span>
+            <span class="s1">startActivity(intent)</span>
+            <span class="s1">(requireActivity() </span><span class="s0">as </span><span class="s1">MainActivity).finish()</span>
+        <span class="s1">}</span>
+
+        <span class="s0">return </span><span class="s1">binding.root</span>
+    <span class="s1">}</span>
+
+    <span class="s1">companion </span><span class="s0">object </span><span class="s1">{</span>
+        <span class="s1">@JvmStatic</span>
+        <span class="s0">fun </span><span class="s1">newInstance(param1: String, param2: String) =</span>
+            <span class="s1">AcauntFragment().apply {</span>
+                <span class="s1">arguments = Bundle().apply {</span>
+
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

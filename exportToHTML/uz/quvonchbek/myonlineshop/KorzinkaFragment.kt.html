@@ -1,0 +1,104 @@
+<html>
+<head>
+<title>KorzinkaFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #067d17;}
+.s3 { color: #0037a6;}
+.s4 { color: #8c8c8c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+KorzinkaFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import android.widget.Toast</span>
+<span class="s1">import com.google.firebase.database.*</span>
+<span class="s1">import com.realpacific.clickshrinkeffect.applyClickShrink</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.adapters.KarzinkaAdapter</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.FragmentKorzinkaBinding</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Order</span>
+
+<span class="s0">class </span><span class="s1">KorzinkaFragment : Fragment() {</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">binding: FragmentKorzinkaBinding</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">karzinkaAdapter: KarzinkaAdapter</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">orderList: ArrayList&lt;Order&gt;</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">firebaseDatabase: FirebaseDatabase</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">reference: DatabaseReference</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">reference2: DatabaseReference</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater, container: ViewGroup?,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s1">): View? {</span>
+        <span class="s1">binding = FragmentKorzinkaBinding.inflate(layoutInflater)</span>
+        <span class="s1">binding.card.applyClickShrink()</span>
+        <span class="s1">firebaseDatabase= FirebaseDatabase.getInstance()</span>
+        <span class="s1">reference=firebaseDatabase.getReference(</span><span class="s2">&quot;korzinka&quot;</span><span class="s1">)</span>
+        <span class="s1">reference2=firebaseDatabase.getReference(</span><span class="s2">&quot;orders&quot;</span><span class="s1">)</span>
+        <span class="s0">var </span><span class="s1">userA=MainActivity.getUserA(requireContext())</span>
+        <span class="s1">orderList=ArrayList()</span>
+        <span class="s1">reference.child(userA.id.toString()).addValueEventListener(</span><span class="s0">object </span><span class="s1">: ValueEventListener {</span>
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onDataChange(snapshot: DataSnapshot) {</span>
+                <span class="s0">val </span><span class="s1">children = snapshot.children</span>
+                <span class="s1">orderList.clear()</span>
+                <span class="s0">for </span><span class="s1">(child </span><span class="s0">in </span><span class="s1">children) {</span>
+                    <span class="s0">var </span><span class="s1">order = child.getValue(Order::</span><span class="s0">class</span><span class="s1">.java)</span>
+                    <span class="s1">orderList.add(order!!)</span>
+                <span class="s1">}</span>
+                <span class="s0">if</span><span class="s1">(orderList.isNotEmpty()) {</span>
+                    <span class="s1">binding.text1.visibility = View.INVISIBLE</span>
+                    <span class="s1">binding.progressCircular.visibility = View.INVISIBLE</span>
+                    <span class="s1">binding.image.visibility = View.INVISIBLE</span>
+                    <span class="s1">binding.card.visibility = View.INVISIBLE</span>
+                    <span class="s1">binding.rv.visibility = View.VISIBLE</span>
+
+                    <span class="s1">karzinkaAdapter = KarzinkaAdapter(</span>
+                        <span class="s1">orderList,</span>
+                        <span class="s0">object </span><span class="s1">: KarzinkaAdapter.OnClickItem {</span>
+                            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onClickConform(</span>
+                                <span class="s1">order: Order,</span>
+                                <span class="s1">position: Int</span>
+                            <span class="s1">) {</span>
+                                <span class="s1">order.isExcept=</span><span class="s0">true</span>
+                                <span class="s1">reference.child(</span><span class="s2">&quot;</span><span class="s3">${</span><span class="s1">userA.id</span><span class="s3">}</span><span class="s2">/</span><span class="s3">${</span><span class="s1">order.id</span><span class="s3">}</span><span class="s2">/except&quot;</span><span class="s1">).setValue(</span><span class="s0">true</span><span class="s1">)</span>
+                                <span class="s1">reference2.child(order.id.toString()).setValue(order)</span>
+                                <span class="s1">Toast.makeText(requireContext(), </span><span class="s2">&quot;On Click&quot;</span><span class="s1">, Toast.LENGTH_SHORT)</span>
+                                    <span class="s1">.show()</span>
+                            <span class="s1">}</span>
+
+                        <span class="s1">})</span>
+
+                    <span class="s1">binding.rv.adapter = karzinkaAdapter</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCancelled(error: DatabaseError) {</span>
+                <span class="s1">TODO(</span><span class="s2">&quot;Not yet implemented&quot;</span><span class="s1">)</span>
+                <span class="s1">Toast.makeText(requireContext(), </span><span class="s2">&quot;Internet bilan muommo bor&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show()</span>
+            <span class="s1">}</span>
+
+        <span class="s1">})</span>
+        <span class="s4">//       orderList.removeAll(orderList)</span>
+
+        <span class="s0">if </span><span class="s1">(orderList.isEmpty()) {</span>
+            <span class="s1">binding.progressCircular.visibility = View.INVISIBLE</span>
+            <span class="s1">binding.rv.visibility = View.INVISIBLE</span>
+        <span class="s1">}</span>
+
+        <span class="s0">return </span><span class="s1">binding.root</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>HomeFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HomeFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import androidx.core.os.bundleOf</span>
+<span class="s1">import androidx.navigation.fragment.findNavController</span>
+<span class="s1">import com.google.firebase.database.*</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.adapters.HomeAdapter1</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.adapters.OnclickRvItem</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.FragmentHomeBinding</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Category</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Product</span>
+<span class="s0">class </span><span class="s1">HomeFragment : Fragment() {</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">binding: FragmentHomeBinding</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">categoryList:ArrayList&lt;Category&gt;</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">firebaseDatabase: FirebaseDatabase</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">reference: DatabaseReference</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">allproductlist:ArrayList&lt;Product&gt;</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater, container: ViewGroup?,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s1">): View {</span>
+        <span class="s2">// Inflate the layout for this fragment</span>
+        <span class="s1">binding= FragmentHomeBinding.inflate(layoutInflater, container, </span><span class="s0">false</span><span class="s1">)</span>
+        <span class="s1">firebaseDatabase= FirebaseDatabase.getInstance()</span>
+        <span class="s1">reference=firebaseDatabase.getReference(</span><span class="s3">&quot;product&quot;</span><span class="s1">)</span>
+        <span class="s1">reference.addValueEventListener(</span><span class="s0">object </span><span class="s1">: ValueEventListener {</span>
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onDataChange(snapshot: DataSnapshot) {</span>
+                <span class="s1">allproductlist= ArrayList()</span>
+                <span class="s0">for </span><span class="s1">(child </span><span class="s0">in </span><span class="s1">snapshot.children) {</span>
+                    <span class="s0">var </span><span class="s1">children1 = child.children</span>
+                    <span class="s0">for </span><span class="s1">(child1 </span><span class="s0">in </span><span class="s1">children1){</span>
+                        <span class="s0">var </span><span class="s1">p=child1.getValue(Product::</span><span class="s0">class</span><span class="s1">.java)</span>
+                        <span class="s1">allproductlist.add(p!!)</span>
+                    <span class="s1">}</span>
+
+                <span class="s1">}</span>
+                <span class="s1">categoryList= ArrayList()</span>
+                <span class="s1">categoryList.add(Category(</span><span class="s3">&quot;Yangi mahsulotlar&quot;</span><span class="s1">, allproductlist))</span>
+                <span class="s1">categoryList.add(Category(</span><span class="s3">&quot;Eng kop sotilganlar&quot;</span><span class="s1">,allproductlist))</span>
+                <span class="s1">categoryList.add(Category(</span><span class="s3">&quot;Tavsiya qilinganlar&quot;</span><span class="s1">,allproductlist))</span>
+                <span class="s0">val </span><span class="s1">homeAdapter1=HomeAdapter1(categoryList, </span><span class="s0">object </span><span class="s1">: OnclickRvItem{</span>
+                    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onclickAll(category: Category) {</span>
+                        <span class="s0">var </span><span class="s1">bundle=Bundle()</span>
+                        <span class="s1">bundle.putSerializable(</span><span class="s3">&quot;key1&quot;</span><span class="s1">,category)</span>
+                        <span class="s1">findNavController().navigate(R.id.categoryFragment,bundle)</span>
+                    <span class="s1">}</span>
+                    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onclickItemOrder(product: Product) {</span>
+                        <span class="s0">val </span><span class="s1">bundle=Bundle()</span>
+                        <span class="s1">bundle.putSerializable(</span><span class="s3">&quot;product&quot;</span><span class="s1">,product)</span>
+                        <span class="s1">findNavController().navigate(R.id.productFragment,bundle)</span>
+                    <span class="s1">}</span>
+                <span class="s1">})</span>
+                <span class="s1">binding.rv1.adapter=homeAdapter1</span>
+            <span class="s1">}</span>
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCancelled(error: DatabaseError) {</span>
+                <span class="s1">TODO(</span><span class="s3">&quot;Not yet implemented&quot;</span><span class="s1">)</span>
+            <span class="s1">}</span>
+        <span class="s1">})</span>
+        <span class="s0">return </span><span class="s1">binding.root</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

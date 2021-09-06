@@ -1,0 +1,147 @@
+<html>
+<head>
+<title>ProductFragment.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #067d17;}
+.s3 { color: #0037a6;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ProductFragment.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">uz.quvonchbek.myonlineshop</span>
+
+<span class="s1">import android.annotation.SuppressLint</span>
+
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import android.view.LayoutInflater</span>
+<span class="s1">import android.view.View</span>
+<span class="s1">import android.view.ViewGroup</span>
+<span class="s1">import android.widget.Toast</span>
+<span class="s1">import androidx.fragment.app.Fragment</span>
+<span class="s1">import com.google.firebase.database.*</span>
+<span class="s1">import com.realpacific.clickshrinkeffect.applyClickShrink</span>
+<span class="s1">import com.shashank.sony.fancygifdialoglib.FancyGifDialog</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.adapters.MyViewPagerAdapter</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.databinding.FragmentProductBinding</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Order</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.Product</span>
+<span class="s1">import uz.quvonchbek.myonlineshop.models.User</span>
+
+
+<span class="s0">class </span><span class="s1">ProductFragment : Fragment() {</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">binding: FragmentProductBinding</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">myViewPagerAdapter: MyViewPagerAdapter</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">firebaseDatabase: FirebaseDatabase</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">reference: DatabaseReference</span>
+    <span class="s1">private </span><span class="s0">var </span><span class="s1">z = </span><span class="s0">true</span>
+    <span class="s1">lateinit </span><span class="s0">var </span><span class="s1">user:User</span>
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreateView(</span>
+        <span class="s1">inflater: LayoutInflater, container: ViewGroup?,</span>
+        <span class="s1">savedInstanceState: Bundle?</span>
+    <span class="s1">): View? {</span>
+        <span class="s1">binding = FragmentProductBinding.inflate(layoutInflater)</span>
+        <span class="s1">firebaseDatabase = FirebaseDatabase.getInstance()</span>
+        <span class="s1">reference = firebaseDatabase.getReference(</span><span class="s2">&quot;korzinka&quot;</span><span class="s1">)</span>
+        <span class="s1">user = MainActivity.getUserA(requireContext())</span>
+        <span class="s0">var </span><span class="s1">product = arguments?.getSerializable(</span><span class="s2">&quot;product&quot;</span><span class="s1">) </span><span class="s0">as </span><span class="s1">Product</span>
+        <span class="s1">reference.child(user.id.toString()).addValueEventListener(</span><span class="s0">object </span><span class="s1">: ValueEventListener {</span>
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onDataChange(snapshot: DataSnapshot) {</span>
+                <span class="s0">val </span><span class="s1">children = snapshot.children</span>
+                <span class="s0">for </span><span class="s1">(child </span><span class="s0">in </span><span class="s1">children) {</span>
+                    <span class="s0">var </span><span class="s1">order=child.getValue(Order::</span><span class="s0">class</span><span class="s1">.java)</span>
+                    <span class="s0">if</span><span class="s1">(order?.productName == product.name){</span>
+                        <span class="s1">z=</span><span class="s0">false</span>
+                    <span class="s1">}</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+
+            <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCancelled(error: DatabaseError) {</span>
+                <span class="s1">TODO(</span><span class="s2">&quot;Not yet implemented&quot;</span><span class="s1">)</span>
+            <span class="s1">}</span>
+
+        <span class="s1">})</span>
+        <span class="s1">binding.addCardToBasket.applyClickShrink()</span>
+        <span class="s1">binding.deleteOrder.applyClickShrink()</span>
+        <span class="s1">binding.data.applyClickShrink()</span>
+        <span class="s1">myViewPagerAdapter = MyViewPagerAdapter(product, childFragmentManager)</span>
+        <span class="s1">(requireActivity() </span><span class="s0">as </span><span class="s1">MainActivity).actionBar?.setTitle(product.name)</span>
+        <span class="s1">setHasOptionsMenu(</span><span class="s0">true</span><span class="s1">)</span>
+        <span class="s1">setBinding(product)</span>
+        <span class="s1">setClicks(product)</span>
+        <span class="s0">return </span><span class="s1">binding.root</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@SuppressLint(</span><span class="s2">&quot;ResourceType&quot;</span><span class="s1">)</span>
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">setClicks(product: Product) {</span>
+        <span class="s1">binding.data.setOnClickListener {</span>
+
+            <span class="s0">var </span><span class="s1">s =</span>
+                <span class="s2">&quot;Narxi: &quot; </span><span class="s1">+ product?.cost + </span><span class="s2">&quot;</span><span class="s3">\n</span><span class="s2">&quot; </span><span class="s1">+ </span><span class="s2">&quot;Modeli: &quot; </span><span class="s1">+ product.name + </span><span class="s2">&quot;</span><span class="s3">\n</span><span class="s2">&quot; </span><span class="s1">+ </span><span class="s2">&quot;Turi: &quot; </span><span class="s1">+ product.type + </span><span class="s2">&quot;</span><span class="s3">\n</span><span class="s2">&quot; </span><span class="s1">+ </span><span class="s2">&quot;Vaqt: &quot; </span><span class="s1">+ product.date + </span><span class="s2">&quot;</span><span class="s3">\n</span><span class="s2">&quot; </span><span class="s1">+ product.description</span>
+            <span class="s1">FancyGifDialog.Builder(requireContext())</span>
+                <span class="s1">.setTitle(product.name)</span>
+                <span class="s1">.setMessage(s)</span>
+                <span class="s1">.setNegativeBtnText(</span><span class="s2">&quot;Yopish&quot;</span><span class="s1">)</span>
+                <span class="s1">.setPositiveBtnBackground(R.color.purple_200)</span>
+                <span class="s1">.setPositiveBtnText(</span><span class="s2">&quot;Ok&quot;</span><span class="s1">)</span>
+                <span class="s1">.setNegativeBtnBackground(R.color.red)</span>
+                <span class="s1">.isCancellable(</span><span class="s0">true</span><span class="s1">)</span>
+                <span class="s1">.OnPositiveClicked {</span>
+                    <span class="s1">Toast.makeText(requireContext(), </span><span class="s2">&quot;Ok&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show()</span>
+                <span class="s1">}</span>
+                <span class="s1">.OnNegativeClicked {</span>
+                    <span class="s1">Toast.makeText(requireContext(), </span><span class="s2">&quot;Yopish&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show()</span>
+                <span class="s1">}</span>
+                <span class="s1">.build()</span>
+        <span class="s1">}</span>
+        <span class="s1">binding.addCardToBasket.setOnClickListener {</span>
+            <span class="s0">if </span><span class="s1">(z) {</span>
+                <span class="s1">z = </span><span class="s0">true</span>
+                <span class="s0">var </span><span class="s1">id = reference.push().key.toString()</span>
+
+                <span class="s0">var </span><span class="s1">order = Order(</span>
+                    <span class="s1">product.name,</span>
+                    <span class="s1">id,</span>
+                    <span class="s1">product.cost,</span>
+                    <span class="s0">false</span><span class="s1">,</span>
+                    <span class="s1">user.id,</span>
+                    <span class="s0">false</span><span class="s1">,</span>
+                    <span class="s1">user.name,</span>
+                    <span class="s1">product.imgUrl,</span>
+                    <span class="s1">user.adress,</span>
+                    <span class="s1">user.phoneNumber</span>
+                <span class="s1">)</span>
+                <span class="s1">reference.child(</span><span class="s2">&quot;</span><span class="s3">${</span><span class="s1">user.id.toString()</span><span class="s3">}</span><span class="s2">/</span><span class="s3">${</span><span class="s1">order.id.toString()</span><span class="s3">}</span><span class="s2">&quot;</span><span class="s1">).setValue(order)</span>
+
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">Toast.makeText(</span>
+                    <span class="s1">requireContext(),</span>
+                    <span class="s2">&quot;Bu mahsulot savatchaga qo`shilgan&quot;</span><span class="s1">,</span>
+                    <span class="s1">Toast.LENGTH_SHORT</span>
+                <span class="s1">).show()</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+
+
+    <span class="s1">}</span>
+
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">setBinding(product: Product) {</span>
+
+        <span class="s1">binding.viewPager.adapter = myViewPagerAdapter</span>
+        <span class="s1">binding.name.text = product.name</span>
+
+        <span class="s1">binding.price.text = product.cost</span>
+        <span class="s1">binding.pageIndicatorView.setViewPager(binding.viewPager)</span>
+
+    <span class="s1">}</span>
+
+
+<span class="s1">}</span></pre>
+</body>
+</html>
